@@ -1,0 +1,9 @@
+.vscode/
+.idea/
+.cursor/
+bin/
+
+
+.DS_Store
+*.md
+!README.md
