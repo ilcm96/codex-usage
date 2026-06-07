@@ -2,8 +2,9 @@
 .idea/
 .cursor/
 bin/
-
+tmp/
 
 .DS_Store
 *.md
 !README.md
+.env

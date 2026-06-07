@@ -1,0 +1,1854 @@
+basePath: /
+definitions:
+  archive.DeviceSummary:
+    properties:
+      hostname:
+        type: string
+      id:
+        type: string
+      lastIngestedAt:
+        type: string
+      name:
+        type: string
+      rawBytes:
+        type: integer
+      sessions:
+        type: integer
+    type: object
+  archive.Health:
+    properties:
+      archiveRows:
+        type: integer
+      conversationTurns:
+        type: integer
+      defaultSearchDocs:
+        type: integer
+      latestIngestedAt:
+        type: string
+      messages:
+        type: integer
+      missingArchiveRows:
+        type: integer
+      missingRawFiles:
+        type: integer
+      oldestIngestedAt:
+        type: string
+      searchDocuments:
+        type: integer
+      sessionSummaries:
+        type: integer
+      sessions:
+        type: integer
+      status:
+        type: string
+      toolEvents:
+        type: integer
+      verifiedArchiveRows:
+        type: integer
+    type: object
+  archive.IntegrityIssue:
+    properties:
+      path:
+        type: string
+      problem:
+        type: string
+      sessionId:
+        type: string
+    type: object
+  archive.IntegrityResult:
+    properties:
+      checked:
+        type: integer
+      issues:
+        items:
+          $ref: '#/definitions/archive.IntegrityIssue'
+        type: array
+      missingFile:
+        type: integer
+      missingPath:
+        type: integer
+      missingSha:
+        type: integer
+      ok:
+        type: integer
+      sizeMismatch:
+        type: integer
+    type: object
+  archive.RepositorySummary:
+    properties:
+      id:
+        type: string
+      lastIngestedAt:
+        type: string
+      name:
+        type: string
+      rawBytes:
+        type: integer
+      sessions:
+        type: integer
+      url:
+        type: string
+    type: object
+  archive.Status:
+    properties:
+      devices:
+        type: integer
+      messages:
+        type: integer
+      missingRawFiles:
+        type: integer
+      missingRawSha:
+        type: integer
+      newestIngestedAt:
+        type: string
+      newestSessionTime:
+        type: string
+      oldestIngestedAt:
+        type: string
+      oldestSessionTime:
+        type: string
+      rawBytes:
+        type: integer
+      sessionEvents:
+        type: integer
+      sessions:
+        type: integer
+      toolEvents:
+        type: integer
+      usageEvents:
+        type: integer
+    type: object
+  filteroptions.DateRange:
+    properties:
+      newest:
+        type: string
+      oldest:
+        type: string
+    type: object
+  filteroptions.Option:
+    properties:
+      count:
+        type: integer
+      detail:
+        type: string
+      id:
+        type: string
+      label:
+        type: string
+    type: object
+  filteroptions.Result:
+    properties:
+      branches:
+        items:
+          $ref: '#/definitions/filteroptions.Option'
+        type: array
+      dateRange:
+        $ref: '#/definitions/filteroptions.DateRange'
+      devices:
+        items:
+          $ref: '#/definitions/filteroptions.Option'
+        type: array
+      models:
+        items:
+          $ref: '#/definitions/filteroptions.Option'
+        type: array
+      projects:
+        items:
+          $ref: '#/definitions/filteroptions.Option'
+        type: array
+      repositories:
+        items:
+          $ref: '#/definitions/filteroptions.Option'
+        type: array
+    type: object
+  httpapi.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  httpapi.HealthResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  httpapi.MeResponse:
+    properties:
+      role:
+        type: string
+    type: object
+  httpapi.StatusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  ingest.BatchResponse:
+    properties:
+      failed:
+        type: integer
+      ingested:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/ingest.ItemResponse'
+        type: array
+      skipped:
+        type: integer
+      status:
+        type: string
+    type: object
+  ingest.ItemResponse:
+    properties:
+      error:
+        type: string
+      filename:
+        type: string
+      raw_file_path:
+        type: string
+      raw_sha256:
+        type: string
+      raw_size_bytes:
+        type: integer
+      session_id:
+        type: string
+      status:
+        type: string
+    type: object
+  projects.ProjectSummary:
+    properties:
+      costUsd:
+        type: number
+      cwd:
+        type: string
+      displayName:
+        type: string
+      id:
+        type: string
+      relativePath:
+        type: string
+      repository:
+        type: string
+      repositoryUrl:
+        type: string
+      sessions:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  projects.RepositorySummary:
+    properties:
+      costUsd:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+      owner:
+        type: string
+      repositoryUrl:
+        type: string
+      sessions:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  search.Result:
+    properties:
+      branch:
+        type: string
+      cwd:
+        type: string
+      defaultSearchable:
+        type: boolean
+      documentScope:
+        type: string
+      kind:
+        type: string
+      matchEnd:
+        type: integer
+      matchStart:
+        type: integer
+      occurredAt:
+        type: string
+      project:
+        type: string
+      rankWeight:
+        type: integer
+      repository:
+        type: string
+      repositoryUrl:
+        type: string
+      role:
+        type: string
+      seq:
+        type: integer
+      sessionId:
+        type: string
+      sessionSummary:
+        type: string
+      sessionTitle:
+        type: string
+      snippet:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+      toolName:
+        type: string
+      turnIndex:
+        type: integer
+    type: object
+  search.SearchResult:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/search.Result'
+        type: array
+      limit:
+        type: integer
+      nextOffset:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+      totalKnown:
+        type: boolean
+    type: object
+  sessions.Detail:
+    properties:
+      branch:
+        type: string
+      cacheHitRate:
+        type: number
+      cachedInputTokens:
+        type: integer
+      commitHash:
+        type: string
+      conversationTurns:
+        type: integer
+      costUsd:
+        type: number
+      cwd:
+        type: string
+      device:
+        type: string
+      displaySubtitle:
+        type: string
+      displayTitle:
+        type: string
+      dominantLanguage:
+        type: string
+      durationSeconds:
+        type: integer
+      firstUserMessage:
+        type: string
+      id:
+        type: string
+      inputTokens:
+        type: integer
+      lastUserMessage:
+        type: string
+      mainModel:
+        type: string
+      messageCount:
+        type: integer
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      project:
+        type: string
+      reasoningOutputTokens:
+        type: integer
+      repository:
+        type: string
+      repositoryUrl:
+        type: string
+      searchableMessages:
+        type: integer
+      searchableTools:
+        type: integer
+      shortSummary:
+        type: string
+      startedAt:
+        type: string
+      title:
+        type: string
+      toolCallCount:
+        type: integer
+      totalTokens:
+        type: integer
+      updatedAt:
+        type: string
+      userIntent:
+        type: string
+    type: object
+  sessions.DetailResult:
+    properties:
+      models:
+        items:
+          $ref: '#/definitions/sessions.ModelUsage'
+        type: array
+      session:
+        $ref: '#/definitions/sessions.Detail'
+      timeline:
+        items: {}
+        type: array
+    type: object
+  sessions.ListItem:
+    properties:
+      assistantMessageCount:
+        type: integer
+      branch:
+        type: string
+      cacheHitRate:
+        type: number
+      cachedInputTokens:
+        type: integer
+      conversationTurns:
+        type: integer
+      costUsd:
+        type: number
+      cwd:
+        type: string
+      device:
+        type: string
+      displaySubtitle:
+        type: string
+      displayTitle:
+        type: string
+      dominantLanguage:
+        type: string
+      durationSeconds:
+        type: integer
+      firstUserMessage:
+        type: string
+      id:
+        type: string
+      inputTokens:
+        type: integer
+      lastUserMessage:
+        type: string
+      mainModel:
+        type: string
+      messageCount:
+        type: integer
+      models:
+        type: string
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      project:
+        type: string
+      reasoningOutputTokens:
+        type: integer
+      repository:
+        type: string
+      repositoryUrl:
+        type: string
+      searchableMessages:
+        type: integer
+      searchableTools:
+        type: integer
+      shortSummary:
+        type: string
+      startedAt:
+        type: string
+      title:
+        type: string
+      toolCallCount:
+        type: integer
+      totalTokens:
+        type: integer
+      updatedAt:
+        type: string
+      userIntent:
+        type: string
+      userMessageCount:
+        type: integer
+    type: object
+  sessions.ListResult:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/sessions.ListItem'
+        type: array
+      limit:
+        type: integer
+      nextOffset:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+      totals:
+        $ref: '#/definitions/sessions.UsageTotals'
+    type: object
+  sessions.ModelUsage:
+    properties:
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      inputTokens:
+        type: integer
+      model:
+        type: string
+      outputTokens:
+        type: integer
+      reasoningOutputTokens:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  sessions.ReaderResult:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/sessions.ReaderTurn'
+        type: array
+      limit:
+        type: integer
+      nextOffset:
+        type: integer
+      offset:
+        type: integer
+      summary:
+        $ref: '#/definitions/sessions.ReaderSummary'
+      total:
+        type: integer
+    type: object
+  sessions.ReaderSummary:
+    properties:
+      assistantMessageCount:
+        type: integer
+      cacheHitRate:
+        type: number
+      conversationTurnCount:
+        type: integer
+      displaySubtitle:
+        type: string
+      displayTitle:
+        type: string
+      dominantLanguage:
+        type: string
+      durationSeconds:
+        type: integer
+      firstUserMessage:
+        type: string
+      lastUserMessage:
+        type: string
+      mainModel:
+        type: string
+      messageCount:
+        type: integer
+      searchableDocumentRows:
+        type: integer
+      sessionId:
+        type: string
+      shortSummary:
+        type: string
+      startedAt:
+        type: string
+      title:
+        type: string
+      toolCallCount:
+        type: integer
+      updatedAt:
+        type: string
+      userIntent:
+        type: string
+      userMessageCount:
+        type: integer
+    type: object
+  sessions.ReaderTurn:
+    properties:
+      assistantSeq:
+        type: integer
+      assistantText:
+        type: string
+      endedAt:
+        type: string
+      startedAt:
+        type: string
+      toolCallCount:
+        type: integer
+      toolNames:
+        items:
+          type: string
+        type: array
+      toolResultCount:
+        type: integer
+      turnIndex:
+        type: integer
+      userSeq:
+        type: integer
+      userText:
+        type: string
+    type: object
+  sessions.SimpleSession:
+    properties:
+      branch:
+        type: string
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      cwd:
+        type: string
+      device:
+        type: string
+      id:
+        type: string
+      inputTokens:
+        type: integer
+      models:
+        type: string
+      outputTokens:
+        type: integer
+      project:
+        type: string
+      reasoningOutputTokens:
+        type: integer
+      repository:
+        type: string
+      repositoryUrl:
+        type: string
+      startedAt:
+        type: string
+      totalTokens:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  sessions.TimelineItem:
+    properties:
+      kind:
+        type: string
+      occurredAt:
+        type: string
+      role:
+        type: string
+      seq:
+        type: integer
+      status:
+        type: string
+      text:
+        type: string
+      toolName:
+        type: string
+    type: object
+  sessions.TimelineResult:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/sessions.TimelineItem'
+        type: array
+      limit:
+        type: integer
+      nextOffset:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  sessions.UsageTotals:
+    properties:
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      inputTokens:
+        type: integer
+      messages:
+        type: integer
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      reasoningOutputTokens:
+        type: integer
+      sessions:
+        type: integer
+      toolCalls:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.BreakdownItem:
+    properties:
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      detail:
+        type: string
+      id:
+        type: string
+      inputTokens:
+        type: integer
+      label:
+        type: string
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      reasoningOutputTokens:
+        type: integer
+      sessions:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.CalendarDay:
+    properties:
+      costUsd:
+        type: number
+      date:
+        type: string
+      projects:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.GlobalTotals:
+    properties:
+      costUsd:
+        type: number
+      devices:
+        type: integer
+      inputTokens:
+        type: integer
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      projects:
+        type: integer
+      sessions:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.SeriesBucket:
+    properties:
+      bucket:
+        type: string
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      inputTokens:
+        type: integer
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      reasoningOutputTokens:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.Summary:
+    properties:
+      activeDays:
+        type: integer
+      avgSessionCost:
+        type: number
+      cacheHitRate:
+        type: number
+      current:
+        $ref: '#/definitions/usage.Totals'
+    type: object
+  usage.Totals:
+    properties:
+      cachedInputTokens:
+        type: integer
+      costUsd:
+        type: number
+      inputTokens:
+        type: integer
+      messages:
+        type: integer
+      outputTokens:
+        type: integer
+      patchAddedLines:
+        type: integer
+      reasoningOutputTokens:
+        type: integer
+      sessions:
+        type: integer
+      toolCalls:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+  usage.Window:
+    properties:
+      cacheHitRate:
+        type: number
+      days:
+        type: integer
+      from:
+        type: string
+      label:
+        type: string
+      to:
+        type: string
+      totals:
+        $ref: '#/definitions/usage.Totals'
+    type: object
+info:
+  contact: {}
+  description: API for Codex usage ingestion, session browsing, usage reporting, and
+    archive inspection.
+  title: codex-usage API
+  version: 0.1.0
+paths:
+  /api/archive/devices:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/archive.DeviceSummary'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Archive devices
+      tags:
+      - Archive
+  /api/archive/health:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/archive.Health'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Archive health
+      tags:
+      - Archive
+  /api/archive/integrity:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/archive.IntegrityResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Archive integrity
+      tags:
+      - Archive
+  /api/archive/repositories:
+    get:
+      parameters:
+      - description: Maximum number of repositories
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/archive.RepositorySummary'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Archive repositories
+      tags:
+      - Archive
+  /api/archive/status:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/archive.Status'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Archive status
+      tags:
+      - Archive
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          properties:
+            password:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpapi.StatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      summary: Login
+      tags:
+      - Auth
+  /api/auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpapi.StatusResponse'
+      summary: Logout
+      tags:
+      - Auth
+  /api/auth/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpapi.MeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Current user
+      tags:
+      - Auth
+  /api/exports/sessions:
+    get:
+      parameters:
+      - description: 'Export format: csv, json, or markdown'
+        in: query
+        name: format
+        type: string
+      - description: Maximum number of rows
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Sort key
+        in: query
+        name: sort
+        type: string
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Branch filter
+        in: query
+        name: branch
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      - text/csv
+      - text/markdown
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/sessions.ListItem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Export sessions
+      tags:
+      - Exports
+  /api/filter-options:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/filteroptions.Result'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Filter options
+      tags:
+      - Filter Options
+  /api/ingest/sessions:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: JSON-encoded ingest metadata array
+        in: formData
+        name: metadata
+        required: true
+        type: string
+      - description: Raw JSONL file
+        in: formData
+        name: raw_0
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/ingest.BatchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - DeviceTokenAuth: []
+      summary: Ingest sessions
+      tags:
+      - Ingest
+  /api/projects:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/projects.ProjectSummary'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: List projects
+      tags:
+      - Projects
+  /api/repositories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/projects.RepositorySummary'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: List repositories
+      tags:
+      - Projects
+  /api/search:
+    get:
+      parameters:
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      - description: Maximum number of rows
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Set false to skip total count
+        in: query
+        name: includeTotal
+        type: boolean
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Search kind filter
+        in: query
+        name: kind
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/search.SearchResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Search
+      tags:
+      - Search
+  /api/sessions:
+    get:
+      parameters:
+      - description: Maximum number of rows
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Sort key
+        in: query
+        name: sort
+        type: string
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Branch filter
+        in: query
+        name: branch
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sessions.ListResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: List sessions with totals
+      tags:
+      - Sessions
+  /api/sessions/{id}:
+    get:
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sessions.DetailResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Session detail
+      tags:
+      - Sessions
+  /api/sessions/{id}/export:
+    get:
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Export format: raw, json, or markdown'
+        in: query
+        name: format
+        type: string
+      produces:
+      - application/json
+      - text/markdown
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Export session
+      tags:
+      - Exports
+  /api/sessions/{id}/reader:
+    get:
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Maximum number of turns
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sessions.ReaderResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Session reader
+      tags:
+      - Sessions
+  /api/sessions/{id}/timeline:
+    get:
+      parameters:
+      - description: Session ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Maximum number of timeline rows
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Timeline kind filter
+        in: query
+        name: kind
+        type: string
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sessions.TimelineResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Session timeline
+      tags:
+      - Sessions
+  /api/sessions/compact:
+    get:
+      parameters:
+      - description: Maximum number of rows
+        in: query
+        name: limit
+        type: integer
+      - description: Pagination offset
+        in: query
+        name: offset
+        type: integer
+      - description: Sort key
+        in: query
+        name: sort
+        type: string
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Branch filter
+        in: query
+        name: branch
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      - description: Text search query
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/sessions.SimpleSession'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: List compact sessions
+      tags:
+      - Sessions
+  /api/usage/breakdown:
+    get:
+      parameters:
+      - description: 'Grouping key: model, repository, project, device, or language'
+        in: query
+        name: groupBy
+        type: string
+      - description: Maximum number of rows
+        in: query
+        name: limit
+        type: integer
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usage.BreakdownItem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Usage breakdown
+      tags:
+      - Usage
+  /api/usage/calendar:
+    get:
+      parameters:
+      - description: Number of days to include
+        in: query
+        name: days
+        type: integer
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usage.CalendarDay'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Usage calendar
+      tags:
+      - Usage
+  /api/usage/series:
+    get:
+      parameters:
+      - description: 'Bucket size: day, week, or month'
+        in: query
+        name: bucket
+        type: string
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usage.SeriesBucket'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Usage series
+      tags:
+      - Usage
+  /api/usage/summary:
+    get:
+      parameters:
+      - description: Start date in YYYY-MM-DD format
+        in: query
+        name: from
+        type: string
+      - description: End date in YYYY-MM-DD format
+        in: query
+        name: to
+        type: string
+      - description: Device ID filter
+        in: query
+        name: deviceId
+        type: string
+      - description: Repository ID filter
+        in: query
+        name: repositoryId
+        type: string
+      - description: Project ID filter
+        in: query
+        name: projectId
+        type: string
+      - description: Model filter
+        in: query
+        name: model
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usage.Summary'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Usage summary
+      tags:
+      - Usage
+  /api/usage/totals:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usage.GlobalTotals'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Global usage totals
+      tags:
+      - Usage
+  /api/usage/windows:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usage.Window'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      security:
+      - CookieAuth: []
+      summary: Recent usage windows
+      tags:
+      - Usage
+  /healthz:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httpapi.HealthResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/httpapi.ErrorResponse'
+      summary: Health check
+      tags:
+      - System
+securityDefinitions:
+  CookieAuth:
+    description: Admin session cookie. Login first, then send the codex_usage_session
+      cookie.
+    in: header
+    name: Cookie
+    type: apiKey
+  DeviceTokenAuth:
+    description: 'Device ingest token. Authorization: Bearer <token> is also accepted
+      by the server.'
+    in: header
+    name: X-Device-Token
+    type: apiKey
+swagger: "2.0"

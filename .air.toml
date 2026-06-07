@@ -1,0 +1,8 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/codex-usage-api ./cmd/codex-usage-api"
+bin = "./tmp/codex-usage-api"
+include_ext = ["go", "sql"]
+exclude_dir = ["tmp", "web"]

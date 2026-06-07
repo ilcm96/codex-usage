@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/ilcm96/codex-usage/internal/app"
+	"github.com/ilcm96/codex-usage/internal/cli/app"
 )
 
 func main() {
