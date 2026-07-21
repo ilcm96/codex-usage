@@ -23,4 +23,9 @@ var embeddedSnapshot = []embeddedEntry{
 	{Model: "gpt-5.4", Pricing: ModelPricing{InputCostPerToken: 2.5e-06, OutputCostPerToken: 1.5e-05, CacheReadInputTokenCost: 2.5e-07}},
 
 	{Model: "gpt-5.5", Pricing: ModelPricing{InputCostPerToken: 5e-06, OutputCostPerToken: 3e-05, CacheReadInputTokenCost: 5e-07}},
+
+	{Model: "gpt-5.6", Pricing: ModelPricing{InputCostPerToken: 5e-06, OutputCostPerToken: 3e-05, CacheReadInputTokenCost: 5e-07, CacheWriteInputTokenCost: 6.25e-06}},
+	{Model: "gpt-5.6-sol", Pricing: ModelPricing{InputCostPerToken: 5e-06, OutputCostPerToken: 3e-05, CacheReadInputTokenCost: 5e-07, CacheWriteInputTokenCost: 6.25e-06}},
+	{Model: "gpt-5.6-terra", Pricing: ModelPricing{InputCostPerToken: 2.5e-06, OutputCostPerToken: 1.5e-05, CacheReadInputTokenCost: 2.5e-07, CacheWriteInputTokenCost: 3.125e-06}},
+	{Model: "gpt-5.6-luna", Pricing: ModelPricing{InputCostPerToken: 1e-06, OutputCostPerToken: 6e-06, CacheReadInputTokenCost: 1e-07, CacheWriteInputTokenCost: 1.25e-06}},
 }

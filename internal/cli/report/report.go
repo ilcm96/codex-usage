@@ -38,11 +38,12 @@ type Row struct {
 }
 
 type RowTotals struct {
-	InputTokens     int64
-	OutputTokens    int64
-	ReasoningTokens int64
-	CacheReadTokens int64
-	TotalTokens     int64
+	InputTokens      int64
+	OutputTokens     int64
+	ReasoningTokens  int64
+	CacheReadTokens  int64
+	CacheWriteTokens int64
+	TotalTokens      int64
 }
 
 type cacheEntry struct {
@@ -367,14 +368,10 @@ func finalizeRow(row *Row, pr pricing.Pricing) {
 
 	// stable order not required here; table renderer can sort models.
 	for model, u := range row.Models {
-		cacheRead := u.CachedInputTokens
-		if cacheRead > u.InputTokens {
-			cacheRead = u.InputTokens
-		}
-		input := u.InputTokens - cacheRead
-		if input < 0 {
-			input = 0
-		}
+		inputTokens := max(u.InputTokens, 0)
+		cacheRead := min(max(u.CachedInputTokens, 0), inputTokens)
+		cacheWrite := min(max(u.CacheWriteInputTokens, 0), inputTokens-cacheRead)
+		input := inputTokens - cacheRead - cacheWrite
 		reasoning := u.ReasoningOutputTokens
 		if reasoning > u.OutputTokens {
 			reasoning = u.OutputTokens
@@ -387,11 +384,13 @@ func finalizeRow(row *Row, pr pricing.Pricing) {
 		totals.OutputTokens += u.OutputTokens
 		totals.ReasoningTokens += reasoning
 		totals.CacheReadTokens += cacheRead
+		totals.CacheWriteTokens += cacheWrite
 		totals.TotalTokens += u.TotalTokens
 		cost += pr.CostForModelUSD(model, pricing.TokenUsage{
-			InputTokens:     u.InputTokens,
-			CacheReadTokens: cacheRead,
-			OutputTokens:    u.OutputTokens,
+			InputTokens:      u.InputTokens,
+			CacheReadTokens:  cacheRead,
+			CacheWriteTokens: cacheWrite,
+			OutputTokens:     u.OutputTokens,
 		}, codexlog.DefaultFallbackModel)
 	}
 
@@ -406,6 +405,7 @@ func sumTotals(rows []Row) RowTotals {
 		t.OutputTokens += r.Totals.OutputTokens
 		t.ReasoningTokens += r.Totals.ReasoningTokens
 		t.CacheReadTokens += r.Totals.CacheReadTokens
+		t.CacheWriteTokens += r.Totals.CacheWriteTokens
 		t.TotalTokens += r.Totals.TotalTokens
 	}
 	return t

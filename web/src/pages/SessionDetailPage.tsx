@@ -97,7 +97,7 @@ export function SessionDetailPage() {
 
       <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          detail={`${formatNumber(session?.inputTokens ?? 0)} ${"Input"} · ${formatNumber(session?.cachedInputTokens ?? 0)} cached`}
+          detail={`${formatNumber(session?.inputTokens ?? 0)} ${"Input"} · ${formatNumber(session?.cachedInputTokens ?? 0)} cache read · ${formatNumber(session?.cacheWriteInputTokens ?? 0)} cache write`}
           icon={BarChart3}
           label={"Total tokens"}
           tone="zinc"
@@ -310,6 +310,10 @@ export function SessionDetailPage() {
               />
               <InfoLine label={"Updated"} value={formatDate(session?.updatedAt ?? null)} />
               <InfoLine label={"Cache hit"} value={formatPercent(session?.cacheHitRate ?? 0)} />
+              <InfoLine
+                label={"Cache writes"}
+                value={formatNumber(session?.cacheWriteInputTokens ?? 0)}
+              />
               <InfoLine
                 label={"Patch added lines"}
                 value={formatNumber(session?.patchAddedLines ?? 0)}

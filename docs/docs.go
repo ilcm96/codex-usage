@@ -2131,6 +2131,9 @@ const docTemplate = `{
                 "cacheHitRate": {
                     "type": "number"
                 },
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2255,6 +2258,9 @@ const docTemplate = `{
                 },
                 "cacheHitRate": {
                     "type": "number"
+                },
+                "cacheWriteInputTokens": {
+                    "type": "integer"
                 },
                 "cachedInputTokens": {
                     "type": "integer"
@@ -2383,6 +2389,9 @@ const docTemplate = `{
         "sessions.ModelUsage": {
             "type": "object",
             "properties": {
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2541,6 +2550,9 @@ const docTemplate = `{
                 "branch": {
                     "type": "string"
                 },
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2640,6 +2652,9 @@ const docTemplate = `{
         "sessions.UsageTotals": {
             "type": "object",
             "properties": {
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2675,6 +2690,9 @@ const docTemplate = `{
         "usage.BreakdownItem": {
             "type": "object",
             "properties": {
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2762,6 +2780,9 @@ const docTemplate = `{
                 "bucket": {
                     "type": "string"
                 },
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },
@@ -2805,6 +2826,9 @@ const docTemplate = `{
         "usage.Totals": {
             "type": "object",
             "properties": {
+                "cacheWriteInputTokens": {
+                    "type": "integer"
+                },
                 "cachedInputTokens": {
                     "type": "integer"
                 },

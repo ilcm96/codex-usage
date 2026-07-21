@@ -12,6 +12,7 @@ const DefaultFallbackModel = "gpt-5"
 type Usage struct {
 	InputTokens           int64 `json:"inputTokens"`
 	CachedInputTokens     int64 `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64 `json:"cacheWriteInputTokens"`
 	OutputTokens          int64 `json:"outputTokens"`
 	ReasoningOutputTokens int64 `json:"reasoningOutputTokens"`
 	TotalTokens           int64 `json:"totalTokens"`
@@ -21,6 +22,7 @@ type Usage struct {
 func (u *Usage) Add(v Usage) {
 	u.InputTokens += v.InputTokens
 	u.CachedInputTokens += v.CachedInputTokens
+	u.CacheWriteInputTokens += v.CacheWriteInputTokens
 	u.OutputTokens += v.OutputTokens
 	u.ReasoningOutputTokens += v.ReasoningOutputTokens
 	u.TotalTokens += v.TotalTokens
@@ -30,6 +32,7 @@ func (u *Usage) Add(v Usage) {
 func (u Usage) IsZero() bool {
 	return u.InputTokens == 0 &&
 		u.CachedInputTokens == 0 &&
+		u.CacheWriteInputTokens == 0 &&
 		u.OutputTokens == 0 &&
 		u.ReasoningOutputTokens == 0
 }
@@ -41,11 +44,12 @@ type UsageEvent struct {
 }
 
 type rawUsage struct {
-	Input     int64
-	Cached    int64
-	Output    int64
-	Reasoning int64
-	Total     int64
+	Input      int64
+	Cached     int64
+	CacheWrite int64
+	Output     int64
+	Reasoning  int64
+	Total      int64
 }
 
 type UsageNormalizer struct {
@@ -193,6 +197,7 @@ func normalizeRawUsage(obj gjson.Result) (rawUsage, bool) {
 		cached = obj.Get("cache_read_input_tokens").Int()
 	}
 	output := obj.Get("output_tokens").Int()
+	cacheWrite := obj.Get("cache_write_input_tokens").Int()
 	reasoning := obj.Get("reasoning_output_tokens").Int()
 	total := obj.Get("total_tokens").Int()
 	if total <= 0 {
@@ -200,11 +205,12 @@ func normalizeRawUsage(obj gjson.Result) (rawUsage, bool) {
 	}
 
 	return rawUsage{
-		Input:     input,
-		Cached:    cached,
-		Output:    output,
-		Reasoning: reasoning,
-		Total:     total,
+		Input:      input,
+		Cached:     cached,
+		CacheWrite: cacheWrite,
+		Output:     output,
+		Reasoning:  reasoning,
+		Total:      total,
 	}, true
 }
 
@@ -222,28 +228,29 @@ func subtractRawUsage(cur rawUsage, prev *rawUsage) rawUsage {
 	}
 
 	return rawUsage{
-		Input:     sub(cur.Input, p.Input),
-		Cached:    sub(cur.Cached, p.Cached),
-		Output:    sub(cur.Output, p.Output),
-		Reasoning: sub(cur.Reasoning, p.Reasoning),
-		Total:     sub(cur.Total, p.Total),
+		Input:      sub(cur.Input, p.Input),
+		Cached:     sub(cur.Cached, p.Cached),
+		CacheWrite: sub(cur.CacheWrite, p.CacheWrite),
+		Output:     sub(cur.Output, p.Output),
+		Reasoning:  sub(cur.Reasoning, p.Reasoning),
+		Total:      sub(cur.Total, p.Total),
 	}
 }
 
 func convertRawUsage(raw rawUsage) Usage {
+	input := max(raw.Input, 0)
 	total := raw.Total
 	if total <= 0 {
-		total = raw.Input + raw.Output
+		total = input + max(raw.Output, 0)
 	}
-	cached := raw.Cached
-	if cached > raw.Input {
-		cached = raw.Input
-	}
+	cached := min(max(raw.Cached, 0), input)
+	cacheWrite := min(max(raw.CacheWrite, 0), input-cached)
 	return Usage{
-		InputTokens:           raw.Input,
+		InputTokens:           input,
 		CachedInputTokens:     cached,
-		OutputTokens:          raw.Output,
-		ReasoningOutputTokens: raw.Reasoning,
+		CacheWriteInputTokens: cacheWrite,
+		OutputTokens:          max(raw.Output, 0),
+		ReasoningOutputTokens: max(raw.Reasoning, 0),
 		TotalTokens:           total,
 	}
 }

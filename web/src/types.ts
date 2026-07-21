@@ -53,6 +53,7 @@ export type Session = {
   searchableTools?: number;
   inputTokens: number;
   cachedInputTokens: number;
+  cacheWriteInputTokens: number;
   outputTokens: number;
   reasoningOutputTokens: number;
   totalTokens: number;
@@ -68,6 +69,7 @@ export type Session = {
 export type UsageTotals = {
   inputTokens: number;
   cachedInputTokens: number;
+  cacheWriteInputTokens: number;
   outputTokens: number;
   reasoningOutputTokens: number;
   totalTokens: number;
@@ -213,6 +215,7 @@ export type ModelUsage = {
   model: string;
   inputTokens: number;
   cachedInputTokens: number;
+  cacheWriteInputTokens: number;
   outputTokens: number;
   reasoningOutputTokens: number;
   totalTokens: number;
@@ -304,6 +307,7 @@ export type UsageSeriesPoint = {
   bucket: string;
   inputTokens: number;
   cachedInputTokens: number;
+  cacheWriteInputTokens: number;
   outputTokens: number;
   reasoningOutputTokens: number;
   totalTokens: number;
@@ -318,6 +322,7 @@ export type UsageBreakdown = {
   sessions: number;
   inputTokens: number;
   cachedInputTokens: number;
+  cacheWriteInputTokens: number;
   outputTokens: number;
   reasoningOutputTokens: number;
   totalTokens: number;

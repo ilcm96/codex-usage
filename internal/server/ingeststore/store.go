@@ -493,6 +493,7 @@ func insertParsedEvents(ctx context.Context, tx pgx.Tx, parsed sessionparse.Sess
 				usage.Model,
 				usage.InputTokens,
 				usage.CachedInputTokens,
+				usage.CacheWriteInputTokens,
 				usage.OutputTokens,
 				usage.ReasoningOutputTokens,
 				usage.TotalTokens,
@@ -500,7 +501,7 @@ func insertParsedEvents(ctx context.Context, tx pgx.Tx, parsed sessionparse.Sess
 			})
 		}
 		if _, err := tx.CopyFrom(ctx, pgx.Identifier{"usage_events"}, []string{
-			"session_id", "seq", "occurred_at", "model", "input_tokens", "cached_input_tokens",
+			"session_id", "seq", "occurred_at", "model", "input_tokens", "cached_input_tokens", "cache_write_input_tokens",
 			"output_tokens", "reasoning_output_tokens", "total_tokens", "cost_usd",
 		}, pgx.CopyFromRows(rows)); err != nil {
 			return fmt.Errorf("insert usage events: %w", err)

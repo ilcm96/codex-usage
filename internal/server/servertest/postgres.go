@@ -41,7 +41,11 @@ func StartPostgres(t *testing.T) *pgxpool.Pool {
 		postgres.WithDatabase("codex_usage_test"),
 		postgres.WithUsername("codex_usage"),
 		postgres.WithPassword("codex_usage"),
-		postgres.WithInitScripts(filepath.Join(root, "migrations", "001_initial.sql")),
+		postgres.WithInitScripts(
+			filepath.Join(root, "migrations", "001_initial.sql"),
+			filepath.Join(root, "migrations", "002_gpt_5_6_cache_write.sql"),
+			filepath.Join(root, "migrations", "003_normalize_gpt_5_6_pricing.sql"),
+		),
 		postgres.BasicWaitStrategies(),
 	)
 	if err != nil {

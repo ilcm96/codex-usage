@@ -80,6 +80,7 @@ type UsageEvent struct {
 	Model                 string
 	InputTokens           int64
 	CachedInputTokens     int64
+	CacheWriteInputTokens int64
 	OutputTokens          int64
 	ReasoningOutputTokens int64
 	TotalTokens           int64
@@ -184,13 +185,15 @@ func parseJSONL(r io.Reader, fallbackMeta FallbackMeta, pr pricing.Pricing) (Ses
 			Model:                 usageEvent.Model,
 			InputTokens:           usage.InputTokens,
 			CachedInputTokens:     usage.CachedInputTokens,
+			CacheWriteInputTokens: usage.CacheWriteInputTokens,
 			OutputTokens:          usage.OutputTokens,
 			ReasoningOutputTokens: usage.ReasoningOutputTokens,
 			TotalTokens:           usage.TotalTokens,
 			CostUSD: pr.CostForModelUSD(usageEvent.Model, pricing.TokenUsage{
-				InputTokens:     usage.InputTokens,
-				CacheReadTokens: usage.CachedInputTokens,
-				OutputTokens:    usage.OutputTokens,
+				InputTokens:      usage.InputTokens,
+				CacheReadTokens:  usage.CachedInputTokens,
+				CacheWriteTokens: usage.CacheWriteInputTokens,
+				OutputTokens:     usage.OutputTokens,
 			}, codexlog.DefaultFallbackModel),
 		})
 	}

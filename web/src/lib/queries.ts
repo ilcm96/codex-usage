@@ -60,6 +60,7 @@ export function sumUsage(items: UsageSeriesPoint[]) {
   return items.reduce(
     (acc, item) => ({
       cachedInputTokens: acc.cachedInputTokens + item.cachedInputTokens,
+      cacheWriteInputTokens: acc.cacheWriteInputTokens + item.cacheWriteInputTokens,
       costUsd: acc.costUsd + item.costUsd,
       inputTokens: acc.inputTokens + item.inputTokens,
       outputTokens: acc.outputTokens + item.outputTokens,
@@ -72,6 +73,7 @@ export function sumUsage(items: UsageSeriesPoint[]) {
     }),
     {
       cachedInputTokens: 0,
+      cacheWriteInputTokens: 0,
       costUsd: 0,
       inputTokens: 0,
       messages: 0,

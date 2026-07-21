@@ -33,6 +33,7 @@ type TimelineParams struct {
 type UsageTotals struct {
 	InputTokens           int64   `json:"inputTokens"`
 	CachedInputTokens     int64   `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64   `json:"cacheWriteInputTokens"`
 	OutputTokens          int64   `json:"outputTokens"`
 	ReasoningOutputTokens int64   `json:"reasoningOutputTokens"`
 	TotalTokens           int64   `json:"totalTokens"`
@@ -44,22 +45,23 @@ type UsageTotals struct {
 }
 
 type SimpleSession struct {
-	ID            string     `json:"id"`
-	StartedAt     *time.Time `json:"startedAt"`
-	UpdatedAt     *time.Time `json:"updatedAt"`
-	CWD           string     `json:"cwd"`
-	Branch        string     `json:"branch"`
-	Repository    string     `json:"repository"`
-	RepositoryURL string     `json:"repositoryUrl"`
-	Project       string     `json:"project"`
-	Device        string     `json:"device"`
-	InputTokens   int64      `json:"inputTokens"`
-	CachedTokens  int64      `json:"cachedInputTokens"`
-	OutputTokens  int64      `json:"outputTokens"`
-	Reasoning     int64      `json:"reasoningOutputTokens"`
-	TotalTokens   int64      `json:"totalTokens"`
-	CostUSD       float64    `json:"costUsd"`
-	Models        string     `json:"models"`
+	ID               string     `json:"id"`
+	StartedAt        *time.Time `json:"startedAt"`
+	UpdatedAt        *time.Time `json:"updatedAt"`
+	CWD              string     `json:"cwd"`
+	Branch           string     `json:"branch"`
+	Repository       string     `json:"repository"`
+	RepositoryURL    string     `json:"repositoryUrl"`
+	Project          string     `json:"project"`
+	Device           string     `json:"device"`
+	InputTokens      int64      `json:"inputTokens"`
+	CachedTokens     int64      `json:"cachedInputTokens"`
+	CacheWriteTokens int64      `json:"cacheWriteInputTokens"`
+	OutputTokens     int64      `json:"outputTokens"`
+	Reasoning        int64      `json:"reasoningOutputTokens"`
+	TotalTokens      int64      `json:"totalTokens"`
+	CostUSD          float64    `json:"costUsd"`
+	Models           string     `json:"models"`
 }
 
 type ListItem struct {
@@ -88,6 +90,7 @@ type ListItem struct {
 	SearchableTools       int64      `json:"searchableTools"`
 	InputTokens           int64      `json:"inputTokens"`
 	CachedTokens          int64      `json:"cachedInputTokens"`
+	CacheWriteTokens      int64      `json:"cacheWriteInputTokens"`
 	OutputTokens          int64      `json:"outputTokens"`
 	Reasoning             int64      `json:"reasoningOutputTokens"`
 	TotalTokens           int64      `json:"totalTokens"`
@@ -136,6 +139,7 @@ type Detail struct {
 	SearchableTools       int64      `json:"searchableTools"`
 	InputTokens           int64      `json:"inputTokens"`
 	CachedInputTokens     int64      `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64      `json:"cacheWriteInputTokens"`
 	OutputTokens          int64      `json:"outputTokens"`
 	ReasoningOutputTokens int64      `json:"reasoningOutputTokens"`
 	TotalTokens           int64      `json:"totalTokens"`
@@ -149,6 +153,7 @@ type ModelUsage struct {
 	Model                 string  `json:"model"`
 	InputTokens           int64   `json:"inputTokens"`
 	CachedInputTokens     int64   `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64   `json:"cacheWriteInputTokens"`
 	OutputTokens          int64   `json:"outputTokens"`
 	ReasoningOutputTokens int64   `json:"reasoningOutputTokens"`
 	TotalTokens           int64   `json:"totalTokens"`

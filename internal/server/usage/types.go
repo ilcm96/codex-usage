@@ -30,6 +30,7 @@ type CalendarParams struct {
 type Totals struct {
 	InputTokens           int64   `json:"inputTokens"`
 	CachedInputTokens     int64   `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64   `json:"cacheWriteInputTokens"`
 	OutputTokens          int64   `json:"outputTokens"`
 	ReasoningOutputTokens int64   `json:"reasoningOutputTokens"`
 	TotalTokens           int64   `json:"totalTokens"`
@@ -62,6 +63,7 @@ type SeriesBucket struct {
 	Bucket                string  `json:"bucket"`
 	InputTokens           int64   `json:"inputTokens"`
 	CachedInputTokens     int64   `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64   `json:"cacheWriteInputTokens"`
 	OutputTokens          int64   `json:"outputTokens"`
 	ReasoningOutputTokens int64   `json:"reasoningOutputTokens"`
 	TotalTokens           int64   `json:"totalTokens"`
@@ -76,6 +78,7 @@ type BreakdownItem struct {
 	Sessions              int64   `json:"sessions"`
 	InputTokens           int64   `json:"inputTokens"`
 	CachedInputTokens     int64   `json:"cachedInputTokens"`
+	CacheWriteInputTokens int64   `json:"cacheWriteInputTokens"`
 	OutputTokens          int64   `json:"outputTokens"`
 	ReasoningOutputTokens int64   `json:"reasoningOutputTokens"`
 	TotalTokens           int64   `json:"totalTokens"`

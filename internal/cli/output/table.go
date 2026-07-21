@@ -90,6 +90,7 @@ func (r *TableRenderer) Render(rep report.AggregatedReport) {
 		"Output",
 		"Reasoning",
 		"Cache Read",
+		"Cache Write",
 		"Total Tokens",
 		"Cost (USD)",
 	})
@@ -102,6 +103,7 @@ func (r *TableRenderer) Render(rep report.AggregatedReport) {
 		{Number: 6, Align: text.AlignRight},
 		{Number: 7, Align: text.AlignRight},
 		{Number: 8, Align: text.AlignRight},
+		{Number: 9, Align: text.AlignRight},
 	})
 
 	for _, row := range rep.Rows {
@@ -112,6 +114,7 @@ func (r *TableRenderer) Render(rep report.AggregatedReport) {
 			formatNumber(row.Totals.OutputTokens),
 			formatNumber(row.Totals.ReasoningTokens),
 			formatNumber(row.Totals.CacheReadTokens),
+			formatNumber(row.Totals.CacheWriteTokens),
 			formatNumber(row.Totals.TotalTokens),
 			formatCurrency(row.CostUSD),
 		})
@@ -124,6 +127,7 @@ func (r *TableRenderer) Render(rep report.AggregatedReport) {
 		formatNumber(rep.Totals.OutputTokens),
 		formatNumber(rep.Totals.ReasoningTokens),
 		formatNumber(rep.Totals.CacheReadTokens),
+		formatNumber(rep.Totals.CacheWriteTokens),
 		formatNumber(rep.Totals.TotalTokens),
 		formatCurrency(sumCost(rep.Rows)),
 	})

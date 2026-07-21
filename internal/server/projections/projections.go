@@ -80,13 +80,14 @@ func insertSessionSummary(ctx context.Context, tx pgx.Tx, parsed sessionparse.Se
 		}
 	}
 
-	var inputTokens, cachedInputTokens, outputTokens, reasoningOutputTokens, totalTokens int64
+	var inputTokens, cachedInputTokens, cacheWriteInputTokens, outputTokens, reasoningOutputTokens, totalTokens int64
 	var costUSD float64
 	modelTotals := map[string]int64{}
 	for _, usage := range parsed.Usages {
 		modelTotals[usage.Model] += usage.TotalTokens
 		inputTokens += usage.InputTokens
 		cachedInputTokens += usage.CachedInputTokens
+		cacheWriteInputTokens += usage.CacheWriteInputTokens
 		outputTokens += usage.OutputTokens
 		reasoningOutputTokens += usage.ReasoningOutputTokens
 		totalTokens += usage.TotalTokens
@@ -149,21 +150,21 @@ func insertSessionSummary(ctx context.Context, tx pgx.Tx, parsed sessionparse.Se
 			first_user_message, last_user_message, short_summary,
 			message_count, user_message_count, assistant_message_count, tool_call_count, patch_added_lines,
 			patch_language_stats, conversation_turn_count, searchable_message_count, searchable_tool_count,
-			main_model, models, input_tokens, cached_input_tokens, output_tokens,
+			main_model, models, input_tokens, cached_input_tokens, cache_write_input_tokens, output_tokens,
 			reasoning_output_tokens, total_tokens, cost_usd,
 			duration_seconds, cache_hit_rate, started_at, updated_at, generated_at
 		)
 		VALUES (
 			$1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 			$11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-			$21, $22, $23, $24, $25, $26, $27, $28, $29, $30, now()
+			$21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, now()
 		)
 	`, parsed.Meta.ID, sanitizeDBText(title), sanitizeDBText(displayTitle), sanitizeDBText(displaySubtitle),
 		sanitizeDBText(userIntent), sanitizeDBText(dominantLanguage), sanitizeDBText(truncate(firstUser, 4000)),
 		sanitizeDBText(truncate(lastUser, 4000)), sanitizeDBText(shortSummary),
 		int64(len(parsed.Messages)), userCount, assistantCount, int64(len(parsed.Tools)),
 		patchStats.AddedLines, patchLanguageStats, int64(len(turns)), searchableMessageCount, searchableToolCount,
-		mainModel, strings.Join(models, ", "), inputTokens, cachedInputTokens, outputTokens,
+		mainModel, strings.Join(models, ", "), inputTokens, cachedInputTokens, cacheWriteInputTokens, outputTokens,
 		reasoningOutputTokens, totalTokens, costUSD,
 		durationSeconds, cacheHitRate, nullableTime(startedAt), nullableTime(updatedAt))
 	return err
@@ -433,7 +434,7 @@ func AddUsageRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []str
 	_, err := tx.Exec(ctx, `
 		INSERT INTO usage_rollups (
 			bucket_date, bucket_month, device_id, repository_id, project_id, model,
-			input_tokens, cached_input_tokens, output_tokens, reasoning_output_tokens, total_tokens, cost_usd
+			input_tokens, cached_input_tokens, cache_write_input_tokens, output_tokens, reasoning_output_tokens, total_tokens, cost_usd
 		)
 		SELECT
 			usage_events.occurred_at::date AS bucket_date,
@@ -444,6 +445,7 @@ func AddUsageRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []str
 			usage_events.model,
 			sum(usage_events.input_tokens)::bigint,
 			sum(usage_events.cached_input_tokens)::bigint,
+			sum(usage_events.cache_write_input_tokens)::bigint,
 			sum(usage_events.output_tokens)::bigint,
 			sum(usage_events.reasoning_output_tokens)::bigint,
 			sum(usage_events.total_tokens)::bigint,
@@ -457,6 +459,7 @@ func AddUsageRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []str
 		DO UPDATE SET
 			input_tokens = usage_rollups.input_tokens + EXCLUDED.input_tokens,
 			cached_input_tokens = usage_rollups.cached_input_tokens + EXCLUDED.cached_input_tokens,
+			cache_write_input_tokens = usage_rollups.cache_write_input_tokens + EXCLUDED.cache_write_input_tokens,
 			output_tokens = usage_rollups.output_tokens + EXCLUDED.output_tokens,
 			reasoning_output_tokens = usage_rollups.reasoning_output_tokens + EXCLUDED.reasoning_output_tokens,
 			total_tokens = usage_rollups.total_tokens + EXCLUDED.total_tokens,
@@ -473,7 +476,7 @@ func AddSessionRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []s
 	_, err := tx.Exec(ctx, `
 		INSERT INTO session_rollups (
 			bucket_date, bucket_month, device_id, repository_id, project_id, session_count,
-			input_tokens, cached_input_tokens, output_tokens, reasoning_output_tokens,
+			input_tokens, cached_input_tokens, cache_write_input_tokens, output_tokens, reasoning_output_tokens,
 			total_tokens, cost_usd, patch_added_lines
 		)
 		SELECT
@@ -485,6 +488,7 @@ func AddSessionRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []s
 			count(sessions.id)::bigint,
 			COALESCE(sum(session_summaries.input_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.cached_input_tokens), 0)::bigint,
+			COALESCE(sum(session_summaries.cache_write_input_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.output_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.reasoning_output_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.total_tokens), 0)::bigint,
@@ -499,6 +503,7 @@ func AddSessionRollupsForSessions(ctx context.Context, tx pgx.Tx, sessionIDs []s
 			session_count = session_rollups.session_count + EXCLUDED.session_count,
 			input_tokens = session_rollups.input_tokens + EXCLUDED.input_tokens,
 			cached_input_tokens = session_rollups.cached_input_tokens + EXCLUDED.cached_input_tokens,
+			cache_write_input_tokens = session_rollups.cache_write_input_tokens + EXCLUDED.cache_write_input_tokens,
 			output_tokens = session_rollups.output_tokens + EXCLUDED.output_tokens,
 			reasoning_output_tokens = session_rollups.reasoning_output_tokens + EXCLUDED.reasoning_output_tokens,
 			total_tokens = session_rollups.total_tokens + EXCLUDED.total_tokens,
@@ -524,7 +529,7 @@ func RebuildUsageRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.Ti
 	_, err := tx.Exec(ctx, `
 		INSERT INTO usage_rollups (
 			bucket_date, bucket_month, device_id, repository_id, project_id, model,
-			input_tokens, cached_input_tokens, output_tokens, reasoning_output_tokens, total_tokens, cost_usd
+			input_tokens, cached_input_tokens, cache_write_input_tokens, output_tokens, reasoning_output_tokens, total_tokens, cost_usd
 		)
 		SELECT
 			usage_events.occurred_at::date AS bucket_date,
@@ -535,6 +540,7 @@ func RebuildUsageRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.Ti
 			usage_events.model,
 			sum(usage_events.input_tokens)::bigint,
 			sum(usage_events.cached_input_tokens)::bigint,
+			sum(usage_events.cache_write_input_tokens)::bigint,
 			sum(usage_events.output_tokens)::bigint,
 			sum(usage_events.reasoning_output_tokens)::bigint,
 			sum(usage_events.total_tokens)::bigint,
@@ -548,6 +554,7 @@ func RebuildUsageRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.Ti
 		DO UPDATE SET
 			input_tokens = EXCLUDED.input_tokens,
 			cached_input_tokens = EXCLUDED.cached_input_tokens,
+			cache_write_input_tokens = EXCLUDED.cache_write_input_tokens,
 			output_tokens = EXCLUDED.output_tokens,
 			reasoning_output_tokens = EXCLUDED.reasoning_output_tokens,
 			total_tokens = EXCLUDED.total_tokens,
@@ -572,7 +579,7 @@ func RebuildSessionRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.
 	_, err := tx.Exec(ctx, `
 		INSERT INTO session_rollups (
 			bucket_date, bucket_month, device_id, repository_id, project_id, session_count,
-			input_tokens, cached_input_tokens, output_tokens, reasoning_output_tokens,
+			input_tokens, cached_input_tokens, cache_write_input_tokens, output_tokens, reasoning_output_tokens,
 			total_tokens, cost_usd, patch_added_lines
 		)
 		SELECT
@@ -584,6 +591,7 @@ func RebuildSessionRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.
 			count(sessions.id)::bigint,
 			COALESCE(sum(session_summaries.input_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.cached_input_tokens), 0)::bigint,
+			COALESCE(sum(session_summaries.cache_write_input_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.output_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.reasoning_output_tokens), 0)::bigint,
 			COALESCE(sum(session_summaries.total_tokens), 0)::bigint,
@@ -598,6 +606,7 @@ func RebuildSessionRollupsForDates(ctx context.Context, tx pgx.Tx, dates []time.
 			session_count = EXCLUDED.session_count,
 			input_tokens = EXCLUDED.input_tokens,
 			cached_input_tokens = EXCLUDED.cached_input_tokens,
+			cache_write_input_tokens = EXCLUDED.cache_write_input_tokens,
 			output_tokens = EXCLUDED.output_tokens,
 			reasoning_output_tokens = EXCLUDED.reasoning_output_tokens,
 			total_tokens = EXCLUDED.total_tokens,

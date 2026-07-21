@@ -321,6 +321,8 @@ definitions:
         type: string
       cacheHitRate:
         type: number
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       commitHash:
@@ -404,6 +406,8 @@ definitions:
         type: string
       cacheHitRate:
         type: number
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       conversationTurns:
@@ -488,6 +492,8 @@ definitions:
     type: object
   sessions.ModelUsage:
     properties:
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
@@ -592,6 +598,8 @@ definitions:
     properties:
       branch:
         type: string
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
@@ -657,6 +665,8 @@ definitions:
     type: object
   sessions.UsageTotals:
     properties:
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
@@ -680,6 +690,8 @@ definitions:
     type: object
   usage.BreakdownItem:
     properties:
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
@@ -737,6 +749,8 @@ definitions:
     properties:
       bucket:
         type: string
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
@@ -765,6 +779,8 @@ definitions:
     type: object
   usage.Totals:
     properties:
+      cacheWriteInputTokens:
+        type: integer
       cachedInputTokens:
         type: integer
       costUsd:
