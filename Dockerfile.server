@@ -1,13 +1,18 @@
-FROM golang:1.26.4-trixie AS builder
+FROM --platform=$BUILDPLATFORM golang:1.26.4-trixie AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /src
 
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/codex-usage-api ./cmd/codex-usage-api \
-	&& CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/codex-usage-backfill-patch-stats ./cmd/codex-usage-backfill-patch-stats
+COPY cmd ./cmd
+COPY docs ./docs
+COPY internal ./internal
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/codex-usage-api ./cmd/codex-usage-api \
+	&& CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags="-s -w" -o /out/codex-usage-backfill-patch-stats ./cmd/codex-usage-backfill-patch-stats
 
 FROM alpine:3.22.4
 
