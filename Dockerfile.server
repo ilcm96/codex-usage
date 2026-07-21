@@ -6,7 +6,8 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/codex-usage-api ./cmd/codex-usage-api
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/codex-usage-api ./cmd/codex-usage-api \
+	&& CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/codex-usage-backfill-patch-stats ./cmd/codex-usage-backfill-patch-stats
 
 FROM alpine:3.22.4
 
@@ -16,6 +17,7 @@ RUN addgroup -S codexusage \
 	&& chown -R codexusage:codexusage /var/lib/codex-usage
 
 COPY --from=builder /out/codex-usage-api /usr/local/bin/codex-usage-api
+COPY --from=builder /out/codex-usage-backfill-patch-stats /usr/local/bin/codex-usage-backfill-patch-stats
 
 USER codexusage
 

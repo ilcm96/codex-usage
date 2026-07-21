@@ -1,6 +1,7 @@
 package projections
 
 import (
+	"encoding/json"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -14,7 +15,22 @@ type patchStats struct {
 	DominantLanguage string
 }
 
+type patchApplyEvent struct {
+	Changes map[string]patchChange `json:"changes"`
+}
+
+type patchChange struct {
+	Type        string `json:"type"`
+	Content     string `json:"content"`
+	UnifiedDiff string `json:"unified_diff"`
+	MovePath    string `json:"move_path"`
+}
+
 func collectPatchStats(tools []sessionparse.ToolEvent) patchStats {
+	if stats, ok := collectAppliedPatchStats(tools); ok {
+		return stats
+	}
+
 	stats := patchStats{LanguageLines: map[string]int64{}}
 	for _, tool := range tools {
 		if !isPatchTool(tool) {
@@ -28,6 +44,69 @@ func collectPatchStats(tools []sessionparse.ToolEvent) patchStats {
 	}
 	stats.DominantLanguage = dominantPatchLanguage(stats.LanguageLines)
 	return stats
+}
+
+func collectAppliedPatchStats(tools []sessionparse.ToolEvent) (patchStats, bool) {
+	stats := patchStats{LanguageLines: map[string]int64{}}
+	found := false
+	for _, tool := range tools {
+		if !strings.Contains(tool.Kind, "patch_apply") {
+			continue
+		}
+		toolStats, ok := parseAppliedPatchStats(tool.PayloadJSON)
+		if !ok {
+			continue
+		}
+		found = true
+		mergePatchStats(&stats, toolStats)
+	}
+	if !found {
+		return patchStats{}, false
+	}
+	stats.DominantLanguage = dominantPatchLanguage(stats.LanguageLines)
+	return stats, true
+}
+
+func parseAppliedPatchStats(payload []byte) (patchStats, bool) {
+	var event patchApplyEvent
+	if err := json.Unmarshal(payload, &event); err != nil || event.Changes == nil {
+		return patchStats{}, false
+	}
+
+	stats := patchStats{LanguageLines: map[string]int64{}}
+	for path, change := range event.Changes {
+		languagePath := path
+		if change.MovePath != "" {
+			languagePath = change.MovePath
+		}
+		language := languageForPath(languagePath)
+		var addedLines int64
+		switch change.Type {
+		case "add":
+			addedLines = countContentLines(change.Content)
+		case "update":
+			addedLines = countAddedLinesInPatch(change.UnifiedDiff)
+		}
+		stats.AddedLines += addedLines
+		stats.LanguageLines[language] += addedLines
+	}
+	stats.DominantLanguage = dominantPatchLanguage(stats.LanguageLines)
+	return stats, true
+}
+
+func countContentLines(content string) int64 {
+	var total int64
+	for range strings.Lines(content) {
+		total++
+	}
+	return total
+}
+
+func mergePatchStats(target *patchStats, source patchStats) {
+	target.AddedLines += source.AddedLines
+	for language, lines := range source.LanguageLines {
+		target.LanguageLines[language] += lines
+	}
 }
 
 func countPatchAddedLines(tools []sessionparse.ToolEvent) int64 {
